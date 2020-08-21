@@ -77,3 +77,9 @@ Script output is: '^@^@/bin/bash', should be '/bin/bash'
 Success!
 ```
 
+So it looks like circleci is putting a null byte in stdin somewhere. You can clear it in `script.sh` by uncommenting this line:
+
+
+```
+# read -t 1 -n 10000 discard # clears stdin
+```
