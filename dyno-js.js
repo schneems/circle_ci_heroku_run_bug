@@ -69,8 +69,6 @@ class Dyno extends stream_1.Duplex {
             else if (this.opts.showStatus) {
                 cli_ux_1.default.action.stop(this._status('done'));
             }
-            console.log("=========");
-            console.log(this.opts);
         }
         catch (error) {
             // Currently the runtime API sends back a 409 in the event the
@@ -315,6 +313,7 @@ class Dyno extends stream_1.Duplex {
             stdin.pipe(c);
             let sigints = [];
             stdin.on('data', function (c) {
+                debug('reading data', c);
                 if (c === '\u0003') {
                     sigints.push(Date.now());
                 }

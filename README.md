@@ -56,4 +56,30 @@ Script output is: '/bin/bash', should be '/bin/bash'
 
 ## Debugging
 
-You can get a LOT more information from the Heroku CLI via running with `DEBUG=*` environment variable. Since this happens on CircleCI but cannot be reproduced outside of that environment, it appears something on disk or in the environment (or how commands are executed) is triggering this behavior.
+You can modify the behavior of `dyno-js.js` to add debugging input. Use the `debug()` function and pass in an `--env DEBUG=*` to docker:
+
+```
+circleci local execute --job build --env HEROKU_API_USER=$(heroku whoami) --env HEROKU_API_KEY=$(heroku auth:token) --env DEBUG=*
+```
+
+In this case I've added a debug output when the process receives an input from stdin it will output it with `reading data`, in this case you can see that it's reading in a character that node won't put on the screen, likely a null byte:
+
+```
+Running which bash on austin-henry-schneeman... connecting, run.3018 (Free)Running which bash on austin-henry-schneeman... up, run.3018 (Free)
+  heroku:run connect +0ms
+  heroku:run input: 'rendezvous\r\n' +2s
+  heroku:run reading data  +1ms   # <============= HERE =========================
+  heroku:run input: '^@^@' +98ms
+  heroku:run input: '/bin/bash\r\n' +1s
+  heroku:run close +3s
+  heroku:run done running +0ms
+Script output is: '^@^@/bin/bash', should be '/bin/bash'
+Success!
+```
+
+So it looks like circleci is putting a null byte in stdin somewhere. You can clear it in `script.sh` by uncommenting this line:
+
+
+```
+# read -t 1 -n 10000 discard # clears stdin
+```
