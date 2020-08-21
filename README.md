@@ -18,7 +18,7 @@ yourname@example.com
 
 ```
 $ brew install circleci
-$ circleci local execute --job build--env HEROKU_API_USER=$(heroku whoami) --env HEROKU_API_KEY=$(heroku auth:token)
+$ circleci local execute --job build --env HEROKU_API_USER=$(heroku whoami) --env HEROKU_API_KEY=$(heroku auth:token)
 ```
 
 Output:

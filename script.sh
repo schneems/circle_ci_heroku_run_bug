@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+sudo mv -f ./dyno-js.js /usr/local/lib/heroku/node_modules/@heroku-cli/plugin-run/lib/lib/dyno.js
+
 app_name=$(heroku apps --json | jq -r first.name)
 
 if [ -z "$app_name" ]; then
