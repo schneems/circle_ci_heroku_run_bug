@@ -20,6 +20,6 @@ fi
 
 echo "$app_name"
 
-heroku_run_output=$(heroku run which bash -a $app_name)
+heroku_run_output=$(heroku run --no-tty which bash -a $app_name)
 
 echo "Script output is: '$heroku_run_output', should be '/bin/bash'"
